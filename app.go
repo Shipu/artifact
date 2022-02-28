@@ -8,7 +8,7 @@ import (
 
 var Res ResponseBuilder
 
-func loadRoute() {
+func LoadRoute() {
 
 	gin.ForceConsoleColor()
 
@@ -23,7 +23,7 @@ func loadRoute() {
 	})
 }
 
-func loadConfig() {
+func LoadConfig() {
 	Config = NewConfig()
 
 	Config.Load()
@@ -33,22 +33,23 @@ func initializeLogger() LoggerBuilder {
 	return NewLogger()
 }
 
-func connectDb() {
+func ConnectDb() {
 	Mongo = NewMongoDB()
 }
 
-func init() {
-	loadRoute()
-	loadConfig()
-	connectDb()
+func New() {
+	LoadConfig()
+	LoadRoute()
 }
 
 func Start() {
+	ConnectDb()
 	initializeLogger()
-
 }
 
 func Run() {
+	Start()
+
 	defer Mongo.Client.Disconnect(Mongo.Ctx)
 
 	port := Config.GetString("App.Port")
