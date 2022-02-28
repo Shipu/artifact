@@ -3,7 +3,6 @@ package artifact
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"golang-gin-boilerplate/config"
 	"net/http"
 )
 
@@ -26,8 +25,6 @@ func loadRoute() {
 
 func loadConfig() {
 	Config = NewConfig()
-	Config.AddConfig("App", new(config.AppConfig))
-	Config.AddConfig("DB", new(config.DatabaseConfig))
 
 	Config.Load()
 }
@@ -54,7 +51,11 @@ func Start() {
 func Run() {
 	defer Mongo.Client.Disconnect(Mongo.Ctx)
 
-	port, _ := Config.Get("App.Port")
+	port := Config.GetString("App.Port")
+
+	if port == "" {
+		port = "8080"
+	}
 
 	Router.Run(fmt.Sprintf(":%d", port))
 }
