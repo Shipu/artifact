@@ -58,5 +58,5 @@ func Run() {
 		port = "8080"
 	}
 
-	Router.Run(fmt.Sprintf(":%d", port))
+	Router.Run(fmt.Sprintf(":%s", port))
 }
