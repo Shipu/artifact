@@ -10,6 +10,8 @@ import (
 	"strings"
 )
 
+var PackageName string
+
 var cliCmd = &cobra.Command{
 	Use:  "crud",
 	Args: cobra.MinimumNArgs(1),
@@ -17,7 +19,8 @@ var cliCmd = &cobra.Command{
 }
 
 func crud(cmd *cobra.Command, args []string) error {
-	name := args[0]
+	PackageName = args[0]
+	name := args[1]
 
 	hasDir, _ := afero.DirExists(afero.NewOsFs(), "pkg")
 	if !hasDir {
@@ -80,6 +83,7 @@ func replaceStub(content string, name string) string {
 	content = strings.Replace(content, "{{TitleName}}", Title(name), -1)
 	content = strings.Replace(content, "{{PluralLowerName}}", Lower(Plural(name)), -1)
 	content = strings.Replace(content, "{{SingularLowerName}}", Lower(Singular(name)), -1)
+	content = strings.Replace(content, "{{PackageName}}", PackageName, -1)
 	return content
 }
 

@@ -2,7 +2,7 @@ package models
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"golang-gin-boilerplate/artifact"
+	"github.com/shipu/artifact"
 )
 
 var {{TitleName}}Collection artifact.MongoCollection = artifact.Mongo.Collection("{{PluralLowerName}}")

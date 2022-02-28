@@ -1,8 +1,8 @@
 package routes
 
 import (
-	. "golang-gin-boilerplate/artifact"
-	c "golang-gin-boilerplate/pkg/{{SingularLowerName}}/controllers"
+	. "github.com/shipu/artifact"
+	c "{{PackageName}}/pkg/{{SingularLowerName}}/controllers"
 )
 
 func Setup() {
