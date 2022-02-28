@@ -48,8 +48,6 @@ func Start() {
 }
 
 func Run() {
-	Start()
-
 	defer Mongo.Client.Disconnect(Mongo.Ctx)
 
 	port := Config.GetString("App.Port")
