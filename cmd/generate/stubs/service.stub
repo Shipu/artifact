@@ -34,18 +34,18 @@ func All{{TitleName}}() []models.{{TitleName}} {
 }
 
 func CreateA{{TitleName}}({{SingularLowerName}} models.{{TitleName}}) models.{{TitleName}} {
-	newEnrollment := models.{{TitleName}}{
+	new{{TitleName}} := models.{{TitleName}}{
 		Id:     primitive.NewObjectID(),
 		Task:   {{SingularLowerName}}.Task,
 		Status: {{SingularLowerName}}.Status,
 	}
 
-	result, err := models.{{TitleName}}Collection.InsertOne(newEnrollment)
+	result, err := models.{{TitleName}}Collection.InsertOne(new{{TitleName}})
 	if err != nil || result == nil {
 		panic(err)
 	}
 
-	return newEnrollment
+	return new{{TitleName}}
 }
 
 func UpdateA{{TitleName}}({{SingularLowerName}}Id string, update{{TitleName}} models.{{TitleName}}) (models.{{TitleName}}, error) {
