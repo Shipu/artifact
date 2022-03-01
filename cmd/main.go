@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/shipu/golang-gin-boilerplate/art/cmd/generate"
+	"github.com/shipu/artifact/cmd/generate"
 	"github.com/spf13/cobra"
 	"log"
 )
