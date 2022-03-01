@@ -1,10 +1,11 @@
-package main
+package generate
 
 import (
 	"fmt"
 	pluralize "github.com/gertd/go-pluralize"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
+	"log"
 	"path"
 	"runtime"
 	"strings"
@@ -12,9 +13,11 @@ import (
 
 var PackageName string
 
-var cliCmd = &cobra.Command{
+var PackageRoot string = "src"
+
+var CrudCmd = &cobra.Command{
 	Use:  "crud",
-	Args: cobra.MinimumNArgs(1),
+	Args: cobra.MinimumNArgs(2),
 	RunE: crud,
 }
 
@@ -22,15 +25,17 @@ func crud(cmd *cobra.Command, args []string) error {
 	PackageName = args[0]
 	name := args[1]
 
-	hasDir, _ := afero.DirExists(afero.NewOsFs(), "pkg")
+	hasDir, _ := afero.DirExists(afero.NewOsFs(), PackageRoot)
 	if !hasDir {
-		afero.NewOsFs().Mkdir("pkg", 0755)
+		afero.NewOsFs().Mkdir(PackageRoot, 0755)
 	}
 
-	fs := afero.NewBasePathFs(afero.NewOsFs(), "pkg/")
+	fs := afero.NewBasePathFs(afero.NewOsFs(), PackageRoot+"/")
 
 	createFolders(fs, name)
 	createFiles(fs, name)
+
+	log.Println("Successfully generated CRUD for " + Title(name))
 
 	return nil
 }
@@ -59,7 +64,7 @@ func createFile(fs afero.Fs, name string, stubPath, filePath string) {
 	contents, _ := fileContents(stubPath)
 	contents = replaceStub(contents, name)
 
-	err := overwrite("pkg/"+filePath, contents)
+	err := overwrite(PackageRoot+"/"+filePath, contents)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -84,6 +89,7 @@ func replaceStub(content string, name string) string {
 	content = strings.Replace(content, "{{PluralLowerName}}", Lower(Plural(name)), -1)
 	content = strings.Replace(content, "{{SingularLowerName}}", Lower(Singular(name)), -1)
 	content = strings.Replace(content, "{{PackageName}}", PackageName, -1)
+	content = strings.Replace(content, "{{PackageRoot}}", PackageRoot, -1)
 	return content
 }
 

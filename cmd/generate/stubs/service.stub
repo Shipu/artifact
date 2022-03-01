@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"{{PackageName}}/pkg/{{SingularLowerName}}/models"
+	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/models"
 	"log"
 )
 

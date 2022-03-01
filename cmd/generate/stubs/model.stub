@@ -1,14 +1,18 @@
 package models
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"github.com/shipu/artifact"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var {{TitleName}}Collection artifact.MongoCollection = artifact.Mongo.Collection("{{PluralLowerName}}")
+var {{TitleName}}Collection artifact.MongoCollection
 
 type {{TitleName}} struct {
 	Id     primitive.ObjectID `json:"id,omitempty" bson:"_id"`
 	Task   string             `json:"task" bson:"task"`
     Status string             `json:"status" bson:"status"`
+}
+
+func Setup() {
+	{{TitleName}}Collection = artifact.Mongo.Collection("{{PluralLowerName}}")
 }

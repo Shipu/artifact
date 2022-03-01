@@ -4,8 +4,8 @@ import "C"
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/shipu/artifact"
-	"{{PackageName}}/pkg/{{SingularLowerName}}/models"
-	"{{PackageName}}/pkg/{{SingularLowerName}}/services"
+	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/models"
+	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/services"
 	"net/http"
 )
 
