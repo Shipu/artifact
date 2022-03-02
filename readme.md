@@ -39,24 +39,24 @@ func main() {
 	// Initialize the application
     New()
 
-	Config.AddConfig("App", new(AppConfig)).Load()
-	
+    Config.AddConfig("App", new(AppConfig)).Load()
+    
     // artifact.Start() // Database connection will be established here
-
-	Router.GET("/", func(c *gin.Context) {
-		data := map[string]interface{}{
-			"app": Config.GetString("App.Name"),
-		}
-
-		//or
-		//data := gin.H{
-		//	"message": "Hello World",
-		//}
-
-		Res.Status(200).
-			Message("success").
-			Data(data).Json(c)
-	})
+    
+    Router.GET("/", func(c *gin.Context) {
+        data := map[string]interface{}{
+            "app": Config.GetString("App.Name"),
+        }
+    
+        //or
+        //data := gin.H{
+        //	"message": "Hello World",
+        //}
+    
+        Res.Status(200).
+            Message("success").
+            Data(data).Json(c)
+    })
     
     Run()
 }
@@ -84,7 +84,7 @@ package main
 import "github.com/shipu/artifact/cmd"
 
 func main() {
-	cmd.Execute()
+    cmd.Execute()
 }
 ```
 Run below command to generate crud.
@@ -114,12 +114,12 @@ Suppose your config is `config/db.go`:
 package config
 
 type DatabaseConfig struct {
-	Username   string `mapstructure:"DB_USER" default:""`
-	Password   string `mapstructure:"DB_PASS" default:""`
-	Host       string `mapstructure:"DB_HOST" default:""`
-	Port       string `mapstructure:"DB_PORT" default:""`
-	Database   string `mapstructure:"DB_DATABASE" default:""`
-	Connection string `mapstructure:"DB_CONNECTION" default:""`
+    Username   string `mapstructure:"DB_USER" default:""`
+    Password   string `mapstructure:"DB_PASS" default:""`
+    Host       string `mapstructure:"DB_HOST" default:""`
+    Port       string `mapstructure:"DB_PORT" default:""`
+    Database   string `mapstructure:"DB_DATABASE" default:""`
+    Connection string `mapstructure:"DB_CONNECTION" default:""`
 }
 ```
 and your `.env` is:
@@ -205,7 +205,7 @@ data := map[string]interface{}{
 Res.Status(200).
     Message("Success").
     Data(data).
-	Json(c)
+    Json(c)
 ```
 
 `Res` Api Methods:
