@@ -19,7 +19,7 @@ func LoadRoute() {
 	//httpRouter.SetTrustedProxies([]string{"0.0.0.0"})
 
 	Router.GET("/health-check", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": "Up and Running"})
+		Res.Code(http.StatusOK).Message("Up and Running").Data(gin.H{"app": "OK"}).Json(c)
 	})
 }
 
