@@ -11,6 +11,16 @@ go get -u github.com/shipu/artifact
 
 ## Quick Start
 ```shell
+$ cat .env
+```
+```dotenv
+APP_NAME=app
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost
+APP_PORT=8080
+```
+```shell
 # assume the following codes in example.go file
 $ cat example.go
 ```
