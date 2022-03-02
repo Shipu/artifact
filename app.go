@@ -50,11 +50,11 @@ func Start() {
 func Run() {
 	defer Mongo.Client.Disconnect(Mongo.Ctx)
 
-	port := Config.GetString("App.Port")
+	port, _ := Config.Int("App.Port")
 
-	if port == "" {
-		port = "8080"
+	if port == 0 {
+		port = 8080
 	}
 
-	Router.Run(fmt.Sprintf(":%s", port))
+	Router.Run(fmt.Sprintf(":%d", port))
 }
