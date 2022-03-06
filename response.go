@@ -2,6 +2,7 @@ package artifact
 
 import (
 	"github.com/gin-gonic/gin"
+	"reflect"
 )
 
 type Response struct {
@@ -32,6 +33,12 @@ func (response ResponseBuilder) Data(data interface{}) ResponseBuilder {
 func (response ResponseBuilder) Build() interface{} {
 	if response.Response.Code == 0 {
 		response.Code(200)
+	}
+
+	data := reflect.TypeOf(response.Response.Data)
+	switch data.Kind() {
+	case reflect.Slice:
+		response.Response.Data = make([]interface{}, 0)
 	}
 
 	return map[string]interface{}{"code": response.Response.Code, "message": response.Response.Message, "data": response.Response.Data}
