@@ -35,10 +35,12 @@ func (response ResponseBuilder) Build() interface{} {
 		response.Code(200)
 	}
 
-	data := reflect.TypeOf(response.Response.Data)
-	switch data.Kind() {
-	case reflect.Slice:
-		response.Response.Data = make([]interface{}, 0)
+	if reflect.ValueOf(response.Response.Data).IsNil() {
+		data := reflect.TypeOf(response.Response.Data)
+		switch data.Kind() {
+		case reflect.Slice:
+			response.Response.Data = make([]interface{}, 0)
+		}
 	}
 
 	return map[string]interface{}{"code": response.Response.Code, "message": response.Response.Message, "data": response.Response.Data}
