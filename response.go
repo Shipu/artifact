@@ -35,10 +35,10 @@ func (response ResponseBuilder) Build() interface{} {
 		response.Code(200)
 	}
 
-	if reflect.ValueOf(response.Response.Data).IsNil() {
-		data := reflect.TypeOf(response.Response.Data)
-		switch data.Kind() {
-		case reflect.Slice:
+	data := reflect.TypeOf(response.Response.Data)
+	switch data.Kind() {
+	case reflect.Slice:
+		if reflect.ValueOf(response.Response.Data).IsNil() {
 			response.Response.Data = make([]interface{}, 0)
 		}
 	}
