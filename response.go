@@ -6,9 +6,10 @@ import (
 )
 
 type Response struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Code    int                    	`json:"code"`
+	Message string                 	`json:"message"`
+	Data    interface{} 		`json:"data"`
+	Raw     map[string]interface{} 	`json:"raw"`
 }
 
 type ResponseBuilder struct {
@@ -30,6 +31,11 @@ func (response ResponseBuilder) Data(data interface{}) ResponseBuilder {
 	return response
 }
 
+func (response ResponseBuilder) Raw(raw map[string]interface{}) ResponseBuilder {
+	response.Response.Raw = raw
+	return response
+}
+
 func (response ResponseBuilder) Build() interface{} {
 	if response.Response.Code == 0 {
 		response.Code(200)
@@ -43,7 +49,13 @@ func (response ResponseBuilder) Build() interface{} {
 		}
 	}
 
-	return map[string]interface{}{"code": response.Response.Code, "message": response.Response.Message, "data": response.Response.Data}
+	res := map[string]interface{}{"code": response.Response.Code, "message": response.Response.Message, "data": response.Response.Data}
+
+	for key, value := range response.Response.Raw {
+		res[key] = value
+	}
+
+	return res
 }
 
 func (response ResponseBuilder) Json(c *gin.Context) {
