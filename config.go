@@ -31,7 +31,15 @@ func NewConfig() *Configuration {
 func (configuration *Configuration) Load() map[string]interface{} {
 	newConfig := make(map[string]interface{})
 	v := env.New(viper.New())
-	v.AutomaticEnv()
+	v.SetConfigFile(".env")
+
+	verr := viper.ReadInConfig()
+	if verr != nil {
+		v.SetConfigFile("")
+		v.AutomaticEnv()
+		log.Println("Currently using environment from os. If you want to modify environment then please create a file with .env extension.")
+	}
+	
 	for name, value := range configuration.RegisteredConfigStruct {
 		err := v.Unmarshal(&value)
 		if err != nil {
