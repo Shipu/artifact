@@ -33,9 +33,9 @@ func (configuration *Configuration) Load() map[string]interface{} {
 	v := env.New(viper.New())
 	v.SetConfigFile(".env")
 
-	verr := viper.ReadInConfig()
+	verr := v.ReadInConfig()
 	if verr != nil {
-		v.SetConfigFile("")
+		v = env.New(viper.New())
 		v.AutomaticEnv()
 		log.Println("Currently using environment from os. If you want to modify environment then please create a file with .env extension.")
 	}
