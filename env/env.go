@@ -1,4 +1,4 @@
-package utilities
+package env
 
 import (
 	"github.com/mitchellh/mapstructure"
