@@ -33,7 +33,7 @@ func (configuration *Configuration) Load() map[string]interface{} {
 	v := env.New(viper.New())
 	v.AutomaticEnv()
 	for name, value := range configuration.RegisteredConfigStruct {
-		err = v.Unmarshal(&value)
+		err := v.Unmarshal(&value)
 		if err != nil {
 			log.Fatal("environment cant be loaded: ", err)
 		}
