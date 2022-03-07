@@ -70,7 +70,7 @@ func (e *Enviper) readEnvs(rawVal interface{}) {
 func (e *Enviper) bindEnvs(in interface{}, prev ...string) {
 	ifv := reflect.ValueOf(in)
 	if ifv.Kind() == reflect.Ptr {
-		ifv = ifv.Elem().Elem()
+		ifv = ifv.Elem().Elem().Elem()
 	}
 	//ifv = ifv.Elem()
 	for i := 0; i < ifv.NumField(); i++ {
