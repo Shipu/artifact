@@ -83,14 +83,17 @@ func (response ResponseBuilder) IndentedJSON(c *gin.Context) {
 }
 
 func (response ResponseBuilder) Html(c *gin.Context, name string) {
+	c.Header("Content-Type", "text/html")
 	c.HTML(response.Response.Code, name, response.Build())
 }
 
 func (response ResponseBuilder) Xml(c *gin.Context) {
+	c.Header("Content-Type", "text/xml")
 	c.XML(response.Response.Code, response.Build())
 }
 
 func (response ResponseBuilder) Yaml(c *gin.Context) {
+	c.Header("Content-Type", "text/yaml")
 	c.YAML(response.Response.Code, response.Build())
 }
 
