@@ -40,6 +40,10 @@ func (response ResponseBuilder) Build() interface{} {
 	if response.Response.Code == 0 {
 		response.Code(200)
 	}
+	
+	if response.Response.Data == nil {
+		response.Response.Data = []int{}
+	}
 
 	data := reflect.TypeOf(response.Response.Data)
 	switch data.Kind() {
