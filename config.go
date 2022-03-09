@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"strings"
 	"unsafe"
+	"github.com/shipu/artifact/env"
 )
 
 var Config *Configuration
@@ -29,15 +30,18 @@ func NewConfig() *Configuration {
 
 func (configuration *Configuration) Load() map[string]interface{} {
 	newConfig := make(map[string]interface{})
+	v := env.New(viper.New())
+	v.SetConfigFile(".env")
+
+	verr := v.ReadInConfig()
+	if verr != nil {
+		v = env.New(viper.New())
+		v.AutomaticEnv()
+		log.Println("Currently using environment from os. If you want to modify environment then please create a file with .env extension.")
+	}
+	
 	for name, value := range configuration.RegisteredConfigStruct {
-		viper.SetConfigFile(".env")
-
-		err := viper.ReadInConfig()
-		if err != nil {
-			log.Fatal("cannot read configuration. please create or check .env file")
-		}
-
-		err = viper.Unmarshal(&value)
+		err := v.Unmarshal(&value)
 		if err != nil {
 			log.Fatal("environment cant be loaded: ", err)
 		}
@@ -45,7 +49,6 @@ func (configuration *Configuration) Load() map[string]interface{} {
 		defaults.SetDefaults(value)
 
 		newConfig[name] = value
-
 	}
 
 	configuration.LoadedConfig = newConfig
