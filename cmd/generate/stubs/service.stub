@@ -1,54 +1,62 @@
 package services
 
 import (
-	"context"
 	"fmt"
+	pagination "github.com/gobeam/mongo-go-pagination"
+	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/dto"
+	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/models"
 	"log"
+	"strconv"
+    "time"
 )
 
-func All{{TitleName}}() []models.{{TitleName}} {
-	cursor, err, ctx := models.{{TitleName}}Collection.Find(bson.M{})
-
+func All{{TitleName}}(requestFilter map[string]interface{}) ([]models.{{TitleName}}, pagination.PaginationData) {
 	var {{PluralLowerName}} []models.{{TitleName}}
 
+	filter := bson.M{}
+
+	if requestFilter["status"] != "" {
+		filter["status"] = requestFilter["status"]
+	}
+
+	page, _ := strconv.ParseInt(requestFilter["page"].(string), 10, 64)
+	limit, _ := strconv.ParseInt(requestFilter["limit"].(string), 10, 64)
+
+	paginatedData, err := pagination.New(models.{{TitleName}}Collection.Collection).
+		Page(page).
+		Limit(limit).
+		Sort("created_at", -1).
+		Decode(&{{PluralLowerName}}).
+		Filter(filter).
+		Find()
+
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
-	if err = cursor.All(ctx, &{{PluralLowerName}}); err != nil {
-		log.Fatal(err)
-	}
-
-	defer func(cursor *mongo.Cursor, ctx context.Context) {
-		var err = cursor.Close(ctx)
-		if err != nil {
-
-		}
-	}(cursor, ctx)
-
-	return {{PluralLowerName}}
+	return {{PluralLowerName}}, paginatedData.Pagination
 }
 
-func CreateA{{TitleName}}({{SingularLowerName}} models.{{TitleName}}) models.{{TitleName}} {
-	new{{TitleName}} := models.{{TitleName}}{
-		Id:     primitive.NewObjectID(),
-		Task:   {{SingularLowerName}}.Task,
-		Status: {{SingularLowerName}}.Status,
+func CreateA{{TitleName}}(create{{TitleName}}Dto dto.Create{{TitleName}}Request) models.{{TitleName}} {
+	{{SingularLowerName}} := models.{{TitleName}}{
+		Id:                 primitive.NewObjectID(),
+		Task:               create{{TitleName}}Dto.Task,
+		Status:             create{{TitleName}}Dto.Status,
+		CreatedAt:          time.Now(),
+		UpdatedAt:          time.Now(),
 	}
 
-	result, err := models.{{TitleName}}Collection.InsertOne(new{{TitleName}})
+	result, err := models.{{TitleName}}Collection.InsertOne({{SingularLowerName}})
 	if err != nil || result == nil {
 		panic(err)
 	}
 
-	return new{{TitleName}}
+	return {{SingularLowerName}}
 }
 
-func UpdateA{{TitleName}}({{SingularLowerName}}Id string, update{{TitleName}} models.{{TitleName}}) (models.{{TitleName}}, error) {
+func UpdateA{{TitleName}}({{SingularLowerName}}Id string, update{{TitleName}}Dto dto.Update{{TitleName}}Request) (models.{{TitleName}}, error) {
 
 	objId, _ := primitive.ObjectIDFromHex({{SingularLowerName}}Id)
 
@@ -59,20 +67,29 @@ func UpdateA{{TitleName}}({{SingularLowerName}}Id string, update{{TitleName}} mo
 		Upsert:         &upsert,
 	}
 
-	result := models.{{TitleName}}Collection.FindOneAndUpdate(bson.M{"_id": objId}, bson.D{
-		{"$set", bson.M{"task": update{{TitleName}}.Task, "status": update{{TitleName}}.Status}},
-	}, &opt)
+	result := models.{{TitleName}}Collection.FindOneAndUpdate(
+		bson.M{"_id": objId},
+		bson.D{
+			{"$set", bson.M{
+				"task":                update{{TitleName}}Dto.Task,
+				"status":              update{{TitleName}}Dto.Status,
+				"updated_at":          time.Now(),
+			}},
+		},
+		&opt,
+	)
 
 	if result.Err() != nil {
 		log.Println("Err ", result.Err())
 		return models.{{TitleName}}{}, result.Err()
 	}
 
-	if err := result.Decode(&update{{TitleName}}); err != nil {
+	var {{SingularLowerName}} models.{{TitleName}}
+	if err := result.Decode(&{{SingularLowerName}}); err != nil {
 		return models.{{TitleName}}{}, err
 	}
 
-	return update{{TitleName}}, nil
+	return {{SingularLowerName}}, nil
 }
 
 func A{{TitleName}}({{SingularLowerName}}Id string) models.{{TitleName}} {
@@ -90,17 +107,14 @@ func A{{TitleName}}({{SingularLowerName}}Id string) models.{{TitleName}} {
 	return {{SingularLowerName}}
 }
 
-func DeleteA{{TitleName}}({{SingularLowerName}}Id string) (error, bool) {
-	var {{SingularLowerName}} models.{{TitleName}}
-
+func DeleteA{{TitleName}}({{SingularLowerName}}Id string) bool {
 	objId, _ := primitive.ObjectIDFromHex({{SingularLowerName}}Id)
 
 	result := models.{{TitleName}}Collection.FindOneAndDelete(bson.D{{"_id", objId}})
 
 	if result.Err() != nil {
-		return result.Err(), false
+		return false
 	}
 
-	return result.Decode(&{{SingularLowerName}}), true
-
+	return true
 }

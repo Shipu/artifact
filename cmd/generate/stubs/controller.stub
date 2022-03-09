@@ -1,25 +1,63 @@
 package controllers
 
-import "C"
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/shipu/artifact"
-	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/models"
+	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/dto"
 	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/services"
 	"net/http"
 )
 
+// {{TitleName}}Index
+// @Summary  all {{PluralLowerName}}
+// @Schemes
+// @Description  All {{PluralLowerName}}
+// @Tags         {{TitleName}}
+// @Accept       json
+// @Produce      json
+// @Param        page                 query   string  false  "Page"
+// @Param        limit                query   string  false  "Limit"
+// @Param        status               query   string  false  "Status"
+// @Success      200
+// @Failure      401
+// @Router       /{{PluralLowerName}} [get]
 func {{TitleName}}Index() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		{{PluralLowerName}} := services.All{{TitleName}}()
 
 		artifact.Res.Data({{PluralLowerName}}).Json(c)
+
+		page := c.DefaultQuery("page", "1")
+        limit := c.DefaultQuery("limit", "10")
+        status := c.DefaultQuery("status", "")
+
+        var filter map[string]interface{} = make(map[string]interface{})
+        filter["page"] = page
+        filter["limit"] = limit
+        filter["status"] = status
+
+        {{PluralLowerName}}, paginate := services.All{{TitleName}}(filter)
+
+        artifact.Res.Code(200).Data({{PluralLowerName}}).Raw(map[string]interface{}{
+            "meta": paginate,
+        }).Json(c)
 	}
 }
 
+// {{TitleName}}Create
+// @Summary  create a {{SingularLowerName}}
+// @Schemes
+// @Description  create a {{SingularLowerName}}
+// @Tags         Cms
+// @Accept       json
+// @Produce      json
+// @Param        request        body    dto.Create{{TitleName}}Request  true  "Create {{TitleName}} Request"
+// @Success      200
+// @Failure      401
+// @Router       /{{PluralLowerName}} [post]
 func {{TitleName}}Create() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var {{SingularLowerName}} models.{{TitleName}}
+		var create{{TitleName}} dto.Create{{TitleName}}Request
 
 		defer func() {
 			if err := recover(); err != nil {
@@ -27,17 +65,28 @@ func {{TitleName}}Create() gin.HandlerFunc {
 			}
 		}()
 
-		if err := c.ShouldBind(&{{SingularLowerName}}); err != nil {
+		if err := c.ShouldBind(&create{{TitleName}}); err != nil {
 			artifact.Res.Code(http.StatusBadRequest).Message("Bad Request").Data(err.Error()).AbortWithStatusJSON(c)
 			return
 		}
 
-		{{SingularLowerName}} = services.CreateA{{TitleName}}({{SingularLowerName}})
+		{{SingularLowerName}} := services.CreateA{{TitleName}}(create{{TitleName}})
 
 		artifact.Res.Code(http.StatusCreated).Message("success").Data({{SingularLowerName}}).Json(c)
 	}
 }
 
+// {{TitleName}}Show
+// @Summary  {{SingularLowerName}} details
+// @Schemes
+// @Description  {{TitleName}} Details
+// @Tags         Cms
+// @Accept       json
+// @Produce      json
+// @Param        {{SingularLowerName}}Id       path    string  true  "{{TitleName}} ID"
+// @Success      200
+// @Failure      401
+// @Router       /{{PluralLowerName}}/{{{SingularLowerName}}Id} [get]
 func {{TitleName}}Show() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
@@ -54,9 +103,21 @@ func {{TitleName}}Show() gin.HandlerFunc {
 	}
 }
 
+// {{TitleName}}Update
+// @Summary  update a {{SingularLowerName}}
+// @Schemes
+// @Description  update a {{SingularLowerName}}
+// @Tags         Cms
+// @Accept       json
+// @Produce      json
+// @Param        {{SingularLowerName}}Id       path    string                   true  "{{TitleName}} ID"
+// @Param        request        body    dto.Update{{TitleName}}Request  true  "Update {{TitleName}} Request"
+// @Success      200
+// @Failure      401
+// @Router       /{{PluralLowerName}}/{{{SingularLowerName}}Id} [put]
 func {{TitleName}}Update() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var update{{TitleName}} models.{{TitleName}}
+		var update{{TitleName}} dto.Update{{TitleName}}Request
 
 		defer func() {
 			if err := recover(); err != nil {
@@ -82,6 +143,17 @@ func {{TitleName}}Update() gin.HandlerFunc {
 	}
 }
 
+// {{TitleName}}Delete
+// @Summary  delete a {{SingularLowerName}}
+// @Schemes
+// @Description  delete a {{SingularLowerName}}
+// @Tags         Cms
+// @Accept       json
+// @Produce      json
+// @Param        {{SingularLowerName}}Id       path    string  true  "{{TitleName}} ID"
+// @Success      200
+// @Failure      422
+// @Router       /{{PluralLowerName}}/{{{SingularLowerName}}Id} [delete]
 func {{TitleName}}Delete() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
@@ -91,13 +163,13 @@ func {{TitleName}}Delete() gin.HandlerFunc {
 		}()
 
 		{{SingularLowerName}}Id := c.Param("{{SingularLowerName}}Id")
-		{{SingularLowerName}}, err := services.DeleteA{{TitleName}}({{SingularLowerName}}Id)
+		err := services.DeleteA{{TitleName}}({{SingularLowerName}}Id)
 
 		if !err {
 			artifact.Res.Code(http.StatusInternalServerError).Message("something wrong").Json(c)
 			return
 		}
 
-		artifact.Res.Code(http.StatusOK).Message("Successfully Delete !!!").Data({{SingularLowerName}}).Json(c)
+		artifact.Res.Code(http.StatusOK).Message("Successfully Delete !!!").Json(c)
 	}
 }
