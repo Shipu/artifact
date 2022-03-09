@@ -46,12 +46,14 @@ func createFolders(fs afero.Fs, name string) {
 	fs.Mkdir(name+"/models", 0755)
 	fs.Mkdir(name+"/routes", 0755)
 	fs.Mkdir(name+"/services", 0755)
+	fs.Mkdir(name+"/dto", 0755)
 }
 
 func createFiles(fs afero.Fs, name string) {
 	createFile(fs, name, "stubs/controller.stub", name+"/controllers/"+name+"_controller.go")
 	createFile(fs, name, "stubs/model.stub", name+"/models/"+name+".go")
 	createFile(fs, name, "stubs/route.stub", name+"/routes/api.go")
+	createFile(fs, name, "stubs/dto.stub", name+"/dto/"+name+"_dto.go")
 	createFile(fs, name, "stubs/service.stub", name+"/services/"+name+"_service.go")
 }
 
