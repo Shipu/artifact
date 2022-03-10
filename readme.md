@@ -218,6 +218,19 @@ Res.Code(200).
     Json(c)
 ```
 
+for set custom key value in response
+```go
+paginate := your paginate data
+
+Res.Code(200).
+    Message("Success").
+    Data(data).
+    Raw(map[string]interface{}{
+        "meta": paginate,
+    }).
+    Json(c)
+```
+
 `Res` Api Methods:
 ```go
 Json
