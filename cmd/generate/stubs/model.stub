@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/shipu/artifact"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 
 var {{TitleName}}Collection artifact.MongoCollection
@@ -15,6 +16,6 @@ type {{TitleName}} struct {
     UpdatedAt time.Time          `json:"updated_at,omitempty" bson:"updated_at"`
 }
 
-func Setup() {
+func {{TitleName}}Setup() {
 	{{TitleName}}Collection = artifact.Mongo.Collection("{{PluralLowerName}}")
 }

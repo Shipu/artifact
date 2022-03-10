@@ -23,11 +23,7 @@ import (
 // @Router       /{{PluralLowerName}} [get]
 func {{TitleName}}Index() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		{{PluralLowerName}} := services.All{{TitleName}}()
-
-		artifact.Res.Data({{PluralLowerName}}).Json(c)
-
-		page := c.DefaultQuery("page", "1")
+        page := c.DefaultQuery("page", "1")
         limit := c.DefaultQuery("limit", "10")
         status := c.DefaultQuery("status", "")
 
@@ -48,7 +44,7 @@ func {{TitleName}}Index() gin.HandlerFunc {
 // @Summary  create a {{SingularLowerName}}
 // @Schemes
 // @Description  create a {{SingularLowerName}}
-// @Tags         Cms
+// @Tags         {{TitleName}}
 // @Accept       json
 // @Produce      json
 // @Param        request        body    dto.Create{{TitleName}}Request  true  "Create {{TitleName}} Request"
@@ -80,7 +76,7 @@ func {{TitleName}}Create() gin.HandlerFunc {
 // @Summary  {{SingularLowerName}} details
 // @Schemes
 // @Description  {{TitleName}} Details
-// @Tags         Cms
+// @Tags         {{TitleName}}
 // @Accept       json
 // @Produce      json
 // @Param        {{SingularLowerName}}Id       path    string  true  "{{TitleName}} ID"
@@ -107,7 +103,7 @@ func {{TitleName}}Show() gin.HandlerFunc {
 // @Summary  update a {{SingularLowerName}}
 // @Schemes
 // @Description  update a {{SingularLowerName}}
-// @Tags         Cms
+// @Tags         {{TitleName}}
 // @Accept       json
 // @Produce      json
 // @Param        {{SingularLowerName}}Id       path    string                   true  "{{TitleName}} ID"
@@ -147,7 +143,7 @@ func {{TitleName}}Update() gin.HandlerFunc {
 // @Summary  delete a {{SingularLowerName}}
 // @Schemes
 // @Description  delete a {{SingularLowerName}}
-// @Tags         Cms
+// @Tags         {{TitleName}}
 // @Accept       json
 // @Produce      json
 // @Param        {{SingularLowerName}}Id       path    string  true  "{{TitleName}} ID"
