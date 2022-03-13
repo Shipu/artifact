@@ -29,8 +29,24 @@ func (mongoCollection MongoCollection) WithContext() MongoCollection {
 }
 
 func NewMongoDB() *MongoDB {
+	port := Config.GetString("DB.Port")
+	var mongoProtocol, host string
 
-	mongoUri := "mongodb+srv://" + Config.GetString("DB.Username") + ":" + Config.GetString("DB.Password") + "@" + Config.GetString("DB.Host") + "/" + Config.GetString("DB.Database") + "?retryWrites=true&w=majority"
+	if port != "" {
+		mongoProtocol = "mongodb://"
+		host = Config.GetString("DB.Host") + ":" + port
+	} else {
+		mongoProtocol = "mongodb+srv://"
+		host = Config.GetString("DB.Host")
+	}
+
+	password := Config.GetString("DB.Password")
+	mongoUserInfo := ""
+	if password != "" {
+		mongoUserInfo = Config.GetString("DB.Username") + ":" + password + "@"
+	}
+
+	mongoUri := mongoProtocol + mongoUserInfo + host + "/" + Config.GetString("DB.Database") + "?retryWrites=true&w=majority"
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(mongoUri))
 	if err != nil {
