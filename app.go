@@ -48,7 +48,9 @@ func Start() {
 }
 
 func Run() {
-	defer Mongo.Client.Disconnect(Mongo.Ctx)
+	if Mongo != nil {
+		defer Mongo.Client.Disconnect(Mongo.Ctx)
+	}
 
 	port, _ := Config.Int("App.Port")
 
