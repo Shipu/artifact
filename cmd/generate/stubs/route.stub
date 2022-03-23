@@ -5,7 +5,7 @@ import (
 	c "{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/controllers"
 )
 
-func Setup() {
+func {{TitleName}}Setup() {
     v1 := Router.Group("api/v1")
 	v1.GET("{{PluralLowerName}}", c.{{TitleName}}Index())
 	v1.POST("{{PluralLowerName}}", c.{{TitleName}}Create())

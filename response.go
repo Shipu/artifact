@@ -41,15 +41,13 @@ func (response ResponseBuilder) Build() interface{} {
 		response.Code(200)
 	}
 	
-	if response.Response.Data == nil {
-		response.Response.Data = []int{}
-	}
-
-	data := reflect.TypeOf(response.Response.Data)
-	switch data.Kind() {
-	case reflect.Slice:
-		if reflect.ValueOf(response.Response.Data).IsNil() {
-			response.Response.Data = make([]interface{}, 0)
+	if response.Response.Data != nil {
+		data := reflect.TypeOf(response.Response.Data)
+		switch data.Kind() {
+		case reflect.Slice:
+			if reflect.ValueOf(response.Response.Data).IsNil() {
+				response.Response.Data = make([]interface{}, 0)
+			}
 		}
 	}
 
