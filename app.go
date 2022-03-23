@@ -29,12 +29,16 @@ func LoadConfig() {
 	Config.Load()
 }
 
-func initializeLogger() LoggerBuilder {
+func InitializeLogger() LoggerBuilder {
 	return NewLogger()
 }
 
-func ConnectDb() {
-	Mongo = NewMongoDB()
+func DatabaseConnection() {
+	DB = NewDatabase()
+}
+
+func NoSqlConnection() {
+	Mongo = NewNoSqlDB()
 }
 
 func New() {
@@ -43,12 +47,14 @@ func New() {
 }
 
 func Start() {
-	ConnectDb()
-	initializeLogger()
+	NoSqlConnection()
+	InitializeLogger()
 }
 
 func Run() {
-	defer Mongo.Client.Disconnect(Mongo.Ctx)
+	if Mongo != nil {
+		defer Mongo.Client.Disconnect(Mongo.Ctx)
+	}
 
 	port, _ := Config.Int("App.Port")
 

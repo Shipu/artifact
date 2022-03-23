@@ -28,11 +28,27 @@ func (mongoCollection MongoCollection) WithContext() MongoCollection {
 	return mongoCollection
 }
 
-func NewMongoDB() *MongoDB {
+func NewNoSqlDB() *MongoDB {
+	port := Config.GetString("NoSql.Port")
+	var noSqlProtocol, host string
 
-	mongoUri := "mongodb+srv://" + Config.GetString("DB.Username") + ":" + Config.GetString("DB.Password") + "@" + Config.GetString("DB.Host") + "/" + Config.GetString("DB.Database") + "?retryWrites=true&w=majority"
+	if port != "" {
+		noSqlProtocol = "mongodb://"
+		host = Config.GetString("NoSql.Host") + ":" + port
+	} else {
+		noSqlProtocol = "mongodb+srv://"
+		host = Config.GetString("NoSql.Host")
+	}
 
-	client, err := mongo.NewClient(options.Client().ApplyURI(mongoUri))
+	password := Config.GetString("NoSql.Password")
+	noSqlUserInfo := ""
+	if password != "" {
+		noSqlUserInfo = Config.GetString("NoSql.Username") + ":" + password + "@"
+	}
+
+	noSqlUri := noSqlProtocol + noSqlUserInfo + host + "/" + Config.GetString("NoSql.Database") + "?retryWrites=true&w=majority"
+
+	client, err := mongo.NewClient(options.Client().ApplyURI(noSqlUri))
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -145,12 +145,12 @@ DB_DATABASE=collection
 For initialization `DatabaseConfig` config.
 
 ```go
-artifact.Config.AddConfig("DB", new(DatabaseConfig)).Load()
+artifact.Config.AddConfig("NoSql", new(DatabaseConfig)).Load()
 ```
 
 ### To get config:
 ```go
-artifact.Config.GetString("DB.Host")
+artifact.Config.GetString("NoSql.Host")
 ```
 
 Config Method List:
