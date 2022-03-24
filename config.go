@@ -3,12 +3,12 @@ package artifact
 import (
 	"github.com/goldeneggg/structil"
 	"github.com/mcuadros/go-defaults"
+	"github.com/shipu/artifact/env"
 	"github.com/spf13/viper"
 	"log"
 	"reflect"
 	"strings"
 	"unsafe"
-	"github.com/shipu/artifact/env"
 )
 
 var Config *Configuration
@@ -16,6 +16,8 @@ var Config *Configuration
 type Configuration struct {
 	RegisteredConfigStruct map[string]interface{}
 	LoadedConfig           map[string]interface{}
+	NoSqlConfig            string
+	RelationDBConfig       string
 }
 
 type Getter struct {
@@ -39,7 +41,7 @@ func (configuration *Configuration) Load() map[string]interface{} {
 		v.AutomaticEnv()
 		log.Println("Currently using environment from os. If you want to modify environment then please create a file with .env extension.")
 	}
-	
+
 	for name, value := range configuration.RegisteredConfigStruct {
 		err := v.Unmarshal(&value)
 		if err != nil {
@@ -51,6 +53,14 @@ func (configuration *Configuration) Load() map[string]interface{} {
 		newConfig[name] = value
 	}
 
+	if configuration.NoSqlConfig != "" {
+		newConfig["NoSqlConfig"] = "NoSql"
+	}
+
+	if configuration.RelationDBConfig != "" {
+		newConfig["RelationDBConfig"] = "DB"
+	}
+
 	configuration.LoadedConfig = newConfig
 
 	return newConfig
@@ -58,6 +68,20 @@ func (configuration *Configuration) Load() map[string]interface{} {
 
 func (configuration *Configuration) AddConfig(name string, userConfig interface{}) *Configuration {
 	configuration.RegisteredConfigStruct[name] = userConfig
+
+	return configuration
+}
+
+func (configuration *Configuration) AddNoSqlConfig(name string, userConfig interface{}) *Configuration {
+	configuration.NoSqlConfig = name
+	configuration.AddConfig(name, userConfig)
+
+	return configuration
+}
+
+func (configuration *Configuration) AddRelationDBConfig(name string, userConfig interface{}) *Configuration {
+	configuration.RelationDBConfig = name
+	configuration.AddConfig(name, userConfig)
 
 	return configuration
 }

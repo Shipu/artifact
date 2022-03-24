@@ -29,24 +29,24 @@ func (mongoCollection MongoCollection) WithContext() MongoCollection {
 }
 
 func NewNoSqlDB() *MongoDB {
-	port := Config.GetString("NoSql.Port")
+	port := Config.GetString(Config.NoSqlConfig + ".Port")
 	var noSqlProtocol, host string
 
 	if port != "" {
 		noSqlProtocol = "mongodb://"
-		host = Config.GetString("NoSql.Host") + ":" + port
+		host = Config.GetString(Config.NoSqlConfig+".Host") + ":" + port
 	} else {
 		noSqlProtocol = "mongodb+srv://"
-		host = Config.GetString("NoSql.Host")
+		host = Config.GetString(Config.NoSqlConfig + ".Host")
 	}
 
-	password := Config.GetString("NoSql.Password")
+	password := Config.GetString(Config.NoSqlConfig + ".Password")
 	noSqlUserInfo := ""
 	if password != "" {
-		noSqlUserInfo = Config.GetString("NoSql.Username") + ":" + password + "@"
+		noSqlUserInfo = Config.GetString(Config.NoSqlConfig+".Username") + ":" + password + "@"
 	}
 
-	noSqlUri := noSqlProtocol + noSqlUserInfo + host + "/" + Config.GetString("NoSql.Database") + "?retryWrites=true&w=majority"
+	noSqlUri := noSqlProtocol + noSqlUserInfo + host + "/" + Config.GetString(Config.NoSqlConfig+".Database") + "?retryWrites=true&w=majority"
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(noSqlUri))
 	if err != nil {
@@ -67,7 +67,7 @@ func NewNoSqlDB() *MongoDB {
 
 	fmt.Println("[C-Log] Connected to MongoDB")
 
-	database := client.Database(Config.GetString("DB.Database"))
+	database := client.Database(Config.GetString(Config.NoSqlConfig + ".Database"))
 
 	return &MongoDB{Client: client, Database: database, Ctx: ctx}
 }
