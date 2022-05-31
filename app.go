@@ -61,6 +61,8 @@ func Run() {
 	if port == 0 {
 		port = 8080
 	}
+	
+	fmt.Sprintf("Server is running on port :%d", port)
 
 	Router.Run(fmt.Sprintf(":%d", port))
 }
