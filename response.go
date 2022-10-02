@@ -6,13 +6,16 @@ import (
 )
 
 type Response struct {
-	Code    int                    	`json:"code"`
-	Message string                 	`json:"message"`
-	Data    interface{} 		`json:"data"`
-	Raw     map[string]interface{} 	`json:"raw"`
+	Code    int                    `json:"code"`
+	Message string                 `json:"message"`
+	Data    interface{}            `json:"data"`
+	Raw     map[string]interface{} `json:"raw"`
 }
 
 type ResponseBuilder struct {
+	CodeKeyName    string
+	MessageKeyName string
+	DataKeyName    string
 	Response
 }
 
@@ -36,11 +39,38 @@ func (response ResponseBuilder) Raw(raw map[string]interface{}) ResponseBuilder 
 	return response
 }
 
+func (response ResponseBuilder) SetCodeKeyName(name string) ResponseBuilder {
+	response.CodeKeyName = name
+	return response
+}
+
+func (response ResponseBuilder) SetMessageKeyName(name string) ResponseBuilder {
+	response.MessageKeyName = name
+	return response
+}
+
+func (response ResponseBuilder) SetDataKeyName(name string) ResponseBuilder {
+	response.DataKeyName = name
+	return response
+}
+
 func (response ResponseBuilder) Build() interface{} {
 	if response.Response.Code == 0 {
 		response.Code(200)
 	}
-	
+
+	if response.DataKeyName == "" {
+		response.SetDataKeyName("data")
+	}
+
+	if response.CodeKeyName == "" {
+		response.SetDataKeyName("status_code")
+	}
+
+	if response.MessageKeyName == "" {
+		response.SetDataKeyName("message")
+	}
+
 	if response.Response.Data != nil {
 		data := reflect.TypeOf(response.Response.Data)
 		switch data.Kind() {
@@ -51,7 +81,7 @@ func (response ResponseBuilder) Build() interface{} {
 		}
 	}
 
-	res := map[string]interface{}{"code": response.Response.Code, "message": response.Response.Message, "data": response.Response.Data}
+	res := map[string]interface{}{response.CodeKeyName: response.Response.Code, response.MessageKeyName: response.Response.Message, response.DataKeyName: response.Response.Data}
 
 	for key, value := range response.Response.Raw {
 		res[key] = value
