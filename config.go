@@ -53,11 +53,13 @@ func (configuration *Configuration) Load() map[string]interface{} {
 		newConfig[name] = value
 	}
 
-	if configuration.NoSqlConfig != "" {
+	if configuration.NoSqlConfig == "" {
+		configuration.NoSqlConfig = "NoSql"
 		newConfig["NoSqlConfig"] = "NoSql"
 	}
 
-	if configuration.RelationDBConfig != "" {
+	if configuration.RelationDBConfig == "" {
+		configuration.RelationDBConfig = "DB"
 		newConfig["RelationDBConfig"] = "DB"
 	}
 
