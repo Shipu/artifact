@@ -39,17 +39,17 @@ func (response ResponseBuilder) Raw(raw map[string]interface{}) ResponseBuilder 
 	return response
 }
 
-func (response ResponseBuilder) SetCodeKeyName(name string) ResponseBuilder {
+func (response *ResponseBuilder) SetCodeKeyName(name string) *ResponseBuilder {
 	response.CodeKeyName = name
 	return response
 }
 
-func (response ResponseBuilder) SetMessageKeyName(name string) ResponseBuilder {
+func (response *ResponseBuilder) SetMessageKeyName(name string) *ResponseBuilder {
 	response.MessageKeyName = name
 	return response
 }
 
-func (response ResponseBuilder) SetDataKeyName(name string) ResponseBuilder {
+func (response *ResponseBuilder) SetDataKeyName(name string) *ResponseBuilder {
 	response.DataKeyName = name
 	return response
 }
@@ -64,11 +64,11 @@ func (response ResponseBuilder) Build() interface{} {
 	}
 
 	if response.CodeKeyName == "" {
-		response.SetDataKeyName("status_code")
+		response.SetCodeKeyName("status_code")
 	}
 
 	if response.MessageKeyName == "" {
-		response.SetDataKeyName("message")
+		response.SetMessageKeyName("message")
 	}
 
 	if response.Response.Data != nil {
