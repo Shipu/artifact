@@ -279,9 +279,30 @@ func main() {
 }
 
 
-
-
 ```
 
+You can run command to generate Custom Command file
+
+```go
+go run ./art make:command module_name command_name
+
+```
+And register in ./art/main.go
+```go
+package main
+
+import (
+	"github.com/shipu/artifact/cmd"
+	"github.com/tenminschool/enrolment-service/art/test/commands"
+)
+
+func init() {
+	cmd.AddCommand(commands.TestCmd) // Register Custom command
+}
+
+func main() {
+	cmd.Execute()
+}
+```
 
 All [Go Mongo Driver](https://docs.mongodb.com/drivers/go/current/) Support.
