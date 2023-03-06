@@ -297,7 +297,7 @@ import (
 )
 
 func init() {
-	cmd.AddCommand(commands.TestCmd) // Register Custom command
+	cmd.AddCommand(commands.TestCmd) // Register the Custom command
 }
 
 func main() {
