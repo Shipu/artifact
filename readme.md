@@ -256,4 +256,53 @@ var TodoCollection artifact.MongoCollection = artifact.Mongo.Collection("todos")
 TodoCollection.Find(bson.M{})
 ```
 
+## Custom Command
+
+```go
+
+// Define the struct
+var TestCmd = &cobra.Command{
+	Use:  "test",
+	RunE: testCommand,
+}
+
+// Write the command function
+func testCommand(cmd *cobra.Command, args []string) error {
+	log.Print("test command")
+	return nil
+}
+
+func main() {
+	cmd.AddCommand(TestCmd) // Add the command
+
+	cmd.Execute()
+}
+
+
+```
+
+You can run command to generate Custom Command file
+
+```go
+go run ./art make:command module_name command_name
+
+```
+And register in ./art/main.go
+```go
+package main
+
+import (
+	"github.com/shipu/artifact/cmd"
+	"github.com/tenminschool/enrolment-service/art/test/commands"
+)
+
+func init() {
+	cmd.AddCommand(commands.TestCmd) // Register the Custom command
+}
+
+func main() {
+	cmd.Execute()
+}
+```
+
 All [Go Mongo Driver](https://docs.mongodb.com/drivers/go/current/) Support.

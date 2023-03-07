@@ -1,0 +1,14 @@
+package commands
+
+import (
+	"github.com/spf13/cobra"
+)
+
+var {{TitleName}}Cmd = &cobra.Command{
+	Use:  "{{PackageName}}",
+	RunE: {{TitleName}}CommandHandle,
+}
+
+func {{TitleName}}CommandHandle(cmd *cobra.Command, args []string) error {
+	return nil
+}
