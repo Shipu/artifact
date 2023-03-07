@@ -17,13 +17,14 @@ func hello(cmd *cobra.Command, args []string) {
 	log.Println("art command")
 }
 
-// add command if necessary
-func AddCommand(cmd *cobra.Command)  {
+// AddCommand add custom command function if necessary
+func AddCommand(cmd *cobra.Command) {
 	RootCmd.AddCommand(cmd)
 }
 
 func init() {
 	RootCmd.AddCommand(generate.CrudCmd)
+	RootCmd.AddCommand(generate.MakeCommand)
 }
 
 func Execute() {

@@ -1,7 +1,6 @@
 package generate
 
 import (
-	"fmt"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"log"
@@ -34,7 +33,6 @@ func makeCommand(cmd *cobra.Command, args []string) error {
 
 	return nil
 }
-
 
 func createCMDFolders(fs afero.Fs, name string) {
 	fs.Mkdir(name, 0755)
