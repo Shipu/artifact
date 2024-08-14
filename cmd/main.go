@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-var rootCmd = &cobra.Command{
+var RootCmd = &cobra.Command{
 	Use:   "art",
 	Short: "A simple artifact command",
 	Long:  `A simple artifact command`,
@@ -17,12 +17,18 @@ func hello(cmd *cobra.Command, args []string) {
 	log.Println("art command")
 }
 
+// AddCommand add custom command function if necessary
+func AddCommand(cmd *cobra.Command) {
+	RootCmd.AddCommand(cmd)
+}
+
 func init() {
-	rootCmd.AddCommand(generate.CrudCmd)
+	RootCmd.AddCommand(generate.CrudCmd)
+	RootCmd.AddCommand(generate.MakeCommand)
 }
 
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
+	if err := RootCmd.Execute(); err != nil {
 		log.Fatal(err)
 	}
 }

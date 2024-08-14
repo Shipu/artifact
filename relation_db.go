@@ -12,7 +12,7 @@ type Database struct {
 }
 
 func NewDatabase() *Database {
-	dsn := Config.GetString(Config.RelationDBConfig+"DB.Username") + ":" + Config.GetString(Config.RelationDBConfig+".Password") + "@tcp(" + Config.GetString(Config.RelationDBConfig+".Host") + ":" + Config.GetString(Config.RelationDBConfig+".Port") + ")/" + Config.GetString(Config.RelationDBConfig+".Database") + "?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := Config.GetString(Config.RelationDBConfig+".Username") + ":" + Config.GetString(Config.RelationDBConfig+".Password") + "@tcp(" + Config.GetString(Config.RelationDBConfig+".Host") + ":" + Config.GetString(Config.RelationDBConfig+".Port") + ")/" + Config.GetString(Config.RelationDBConfig+".Database") + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
