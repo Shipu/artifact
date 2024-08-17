@@ -1,4 +1,4 @@
-module github.com/shipu/artifact
+module github.com/toufiq-austcse/artifact
 
 go 1.17
 
