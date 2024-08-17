@@ -33,8 +33,13 @@ func InitializeLogger() LoggerBuilder {
 	return NewLogger()
 }
 
-func DatabaseConnection() {
-	DB = NewDatabase()
+func DatabaseConnection() error {
+	db, err := NewDatabase()
+	if err != nil {
+		return err
+	}
+	DB = db
+	return nil
 }
 
 func NoSqlConnection() {
@@ -61,7 +66,7 @@ func Run() {
 	if port == 0 {
 		port = 8080
 	}
-	
+
 	fmt.Println("Server is running on port", fmt.Sprintf(":%d", port))
 
 	Router.Run(fmt.Sprintf(":%d", port))
