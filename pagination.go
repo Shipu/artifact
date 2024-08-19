@@ -9,7 +9,7 @@ import (
 
 var Pagination paginator.Paginator
 
-type Meta struct {
+type PaginationMeta struct {
 	CurrentPage int `json:"current_page"`
 	PerPage     int `json:"per_page"`
 	LastPage    int `json:"last_page"`
@@ -17,7 +17,7 @@ type Meta struct {
 }
 
 type Paginator struct {
-	Meta Meta `json:"meta"`
+	Meta PaginationMeta `json:"meta"`
 	*paginator.Paginator
 }
 
@@ -70,7 +70,7 @@ func NewPaginator(v interface{}, request map[string]interface{}) *Paginator {
 
 	p := paginator.New(opts...)
 
-	newInstance := &Paginator{Meta: Meta{}, Paginator: p}
+	newInstance := &Paginator{Meta: PaginationMeta{}, Paginator: p}
 	newInstance.updateMeta(v, request)
 
 	return newInstance
