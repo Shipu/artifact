@@ -24,6 +24,7 @@ var CrudCmd = &cobra.Command{
 func crud(cmd *cobra.Command, args []string) error {
 	PackageName = args[0]
 	name := args[1]
+	crudStyle := args[2]
 
 	hasDir, _ := afero.DirExists(afero.NewOsFs(), PackageRoot)
 	if !hasDir {
@@ -33,7 +34,7 @@ func crud(cmd *cobra.Command, args []string) error {
 	fs := afero.NewBasePathFs(afero.NewOsFs(), PackageRoot+"/")
 
 	createFolders(fs, name)
-	createFiles(fs, name)
+	createFiles(fs, name, crudStyle)
 
 	log.Println("Successfully generated CRUD for " + Title(name))
 
@@ -49,12 +50,16 @@ func createFolders(fs afero.Fs, name string) {
 	fs.Mkdir(name+"/dto", 0755)
 }
 
-func createFiles(fs afero.Fs, name string) {
-	createFile(fs, name, "stubs/controller.stub", name+"/controllers/"+name+"_controller.go")
-	createFile(fs, name, "stubs/model.stub", name+"/models/"+name+".go")
-	createFile(fs, name, "stubs/route.stub", name+"/routes/api.go")
-	createFile(fs, name, "stubs/dto.stub", name+"/dto/"+name+"_dto.go")
-	createFile(fs, name, "stubs/service.stub", name+"/services/"+name+"_service.go")
+func createFiles(fs afero.Fs, name string, crudStyle string) {
+	stubPath := "stubs"
+	if crudStyle == "relational" {
+		stubPath = "stubs/relational"
+	}
+	createFile(fs, name, stubPath+"/controller.stub", name+"/controllers/"+name+"_controller.go")
+	createFile(fs, name, stubPath+"/model.stub", name+"/models/"+name+".go")
+	createFile(fs, name, stubPath+"/route.stub", name+"/routes/api.go")
+	createFile(fs, name, stubPath+"/dto.stub", name+"/dto/"+name+"_dto.go")
+	createFile(fs, name, stubPath+"/service.stub", name+"/services/"+name+"_service.go")
 }
 
 func createFile(fs afero.Fs, name string, stubPath, filePath string) {

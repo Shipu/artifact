@@ -82,6 +82,11 @@ $ go run example.go
 ```go
 go run ./art crud package_name crud_module_name
 ```
+for relational crud generator
+```go
+go run ./art crud package_name crud_module_name relational
+```
+please change the `package_name` and `crud_module_name` according to your need.
 
 for example:
 ```shell

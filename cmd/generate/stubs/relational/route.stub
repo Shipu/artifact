@@ -1,0 +1,15 @@
+package routes
+
+import (
+	. "github.com/shipu/artifact"
+	c "{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/controllers"
+)
+
+func {{TitleName}}Setup() {
+    v1 := Router.Group("api/v1")
+	v1.GET("{{PluralLowerName}}", c.{{TitleName}}Index())
+	v1.POST("{{PluralLowerName}}", c.{{TitleName}}Create())
+	v1.GET("{{PluralLowerName}}/:{{SingularLowerName}}Id", c.{{TitleName}}Show())
+	v1.PUT("{{PluralLowerName}}/:{{SingularLowerName}}Id", c.{{TitleName}}Update())
+	v1.DELETE("{{PluralLowerName}}/:{{SingularLowerName}}Id", c.{{TitleName}}Delete())
+}

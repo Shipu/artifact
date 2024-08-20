@@ -1,0 +1,92 @@
+package services
+
+import (
+	"github.com/shipu/artifact"
+	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/dto"
+	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/models"
+	"log"
+    "time"
+)
+
+func All{{TitleName}}(requestFilter map[string]interface{}) ([]models.{{TitleName}}, pagination.PaginationData) {
+	var {{PluralLowerName}} []models.{{TitleName}}
+
+	filter := make(map[string]interface{})
+
+	if requestFilter["status"] != "" {
+		filter["status"] = requestFilter["status"]
+	}
+
+    paginationInstance := artifact.NewPaginator({{PluralLowerName}}, requestFilter)
+
+    models.{{TitleName}}Model.Where(filter).Scopes(paginationInstance.PaginateScope()).Find(&{{PluralLowerName}})
+
+    return {{PluralLowerName}}, paginationInstance.Meta, nil
+
+	if err != nil {
+		panic(err)
+	}
+	return {{PluralLowerName}}, paginatedData.Pagination
+
+	// cursor pagination demo
+    //result, cursor, err := paginationInstance.Paginate(models.{{TitleName}}Model.Where(filter), &{{PluralLowerName}})
+    //if err != nil {
+    //	return nil, cursor, err
+    //}
+    //
+    //if result.Error != nil {
+    //	return nil, paginationInstance.Cursor{}, result.Error
+    //}
+    //
+    //return {{PluralLowerName}}, cursor, nil
+}
+
+func CreateA{{TitleName}}(create{{TitleName}}Dto dto.Create{{TitleName}}Request) models.{{TitleName}} {
+	{{SingularLowerName}} := models.{{TitleName}}{
+		Task:               create{{TitleName}}Dto.Task,
+		Status:             create{{TitleName}}Dto.Status,
+		CreatedAt:          time.Now(),
+		UpdatedAt:          time.Now(),
+	}
+
+	result, err := models.{{TitleName}}Model.Create(&{{SingularLowerName}})
+	if err != nil || result == nil {
+		panic(err)
+	}
+
+	return {{SingularLowerName}}
+}
+
+func UpdateA{{TitleName}}({{SingularLowerName}}Id string, update{{TitleName}}Dto dto.Update{{TitleName}}Request) (models.{{TitleName}}, error) {
+	{{SingularLowerName}} := A{{TitleName}}({{SingularLowerName}}Id)
+
+    {{SingularLowerName}}.Task = update{{TitleName}}Dto.Task
+    {{SingularLowerName}}.Status = update{{TitleName}}Dto.Status
+
+    models.{{TitleName}}Model.Save(&{{SingularLowerName}})
+
+	return {{SingularLowerName}}, nil
+}
+
+func A{{TitleName}}({{SingularLowerName}}Id string) models.{{TitleName}} {
+	var {{SingularLowerName}} models.{{TitleName}}
+
+    result := models.{{TitleName}}Model.First(&{{SingularLowerName}}, {{SingularLowerName}}Id)
+
+    if result.Error != nil {
+        panic("{{TitleName}} not found")
+    }
+
+	return {{SingularLowerName}}
+}
+
+func DeleteA{{TitleName}}({{SingularLowerName}}Id string) bool {
+    {{SingularLowerName}} := A{{TitleName}}({{SingularLowerName}}Id)
+	result := models.{{TitleName}}Model.Delete(&{{SingularLowerName}})
+
+	if result.RowsAffected == 0 {
+		return false
+	}
+
+	return true
+}

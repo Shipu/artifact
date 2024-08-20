@@ -15,6 +15,7 @@ var MakeCommand = &cobra.Command{
 func makeCommand(cmd *cobra.Command, args []string) error {
 	PackageName = args[0]
 	name := args[1]
+	crudStyle := args[2]
 
 	PackageRoot = "art"
 
@@ -27,7 +28,7 @@ func makeCommand(cmd *cobra.Command, args []string) error {
 	fs := afero.NewBasePathFs(afero.NewOsFs(), PackageRoot)
 
 	createCMDFolders(fs, name)
-	createCmdFiles(fs, name)
+	createCmdFiles(fs, name, crudStyle)
 
 	log.Println("Successfully generated Command file for " + Title(name))
 
@@ -39,6 +40,10 @@ func createCMDFolders(fs afero.Fs, name string) {
 	fs.Mkdir(name+"/commands", 0755)
 }
 
-func createCmdFiles(fs afero.Fs, name string) {
-	createFile(fs, name, "stubs/cmd.stub", name+"/commands/"+name+"Command.go")
+func createCmdFiles(fs afero.Fs, name string, crudStyle string) {
+	stubPath := "stubs"
+	if crudStyle == "relational" {
+		stubPath = "stubs/relational"
+	}
+	createFile(fs, name, stubPath+"/cmd.stub", name+"/commands/"+name+"Command.go")
 }
