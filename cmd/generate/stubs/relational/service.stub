@@ -8,7 +8,7 @@ import (
     "time"
 )
 
-func All{{TitleName}}(requestFilter map[string]interface{}) ([]models.{{TitleName}}, pagination.PaginationData) {
+func All{{TitleName}}(requestFilter map[string]interface{}) ([]models.{{TitleName}}, artifact.PaginationMeta, error) {
 	var {{PluralLowerName}} []models.{{TitleName}}
 
 	filter := make(map[string]interface{})
@@ -22,11 +22,6 @@ func All{{TitleName}}(requestFilter map[string]interface{}) ([]models.{{TitleNam
     models.{{TitleName}}Model.Where(filter).Scopes(paginationInstance.PaginateScope()).Find(&{{PluralLowerName}})
 
     return {{PluralLowerName}}, paginationInstance.Meta, nil
-
-	if err != nil {
-		panic(err)
-	}
-	return {{PluralLowerName}}, paginatedData.Pagination
 
 	// cursor pagination demo
     //result, cursor, err := paginationInstance.Paginate(models.{{TitleName}}Model.Where(filter), &{{PluralLowerName}})
@@ -49,10 +44,10 @@ func CreateA{{TitleName}}(create{{TitleName}}Dto dto.Create{{TitleName}}Request)
 		UpdatedAt:          time.Now(),
 	}
 
-	result, err := models.{{TitleName}}Model.Create(&{{SingularLowerName}})
-	if err != nil || result == nil {
-		panic(err)
-	}
+	result := models.{{TitleName}}Model.Create(&{{SingularLowerName}})
+    if result == nil {
+        panic("Error creating {{SingularLowerName}}")
+    }
 
 	return {{SingularLowerName}}
 }
