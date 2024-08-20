@@ -55,8 +55,15 @@ func (paginator *Paginator) updateMeta(v interface{}, request map[string]interfa
 	paginator.Meta.CurrentPage = int(page)
 	paginator.Meta.PerPage = int(limit)
 
+	countFilterMap := make(map[string]interface{})
+	for k, v := range request {
+		if k != "page" && k != "limit" {
+			countFilterMap[k] = v
+		}
+	}
+	
 	var totalRows int64
-	DB.Model(v).Count(&totalRows)
+	DB.Model(v).Where(countFilterMap).Count(&totalRows)
 	paginator.Meta.Total = int(totalRows)
 	paginator.Meta.LastPage = int(math.Ceil(float64(totalRows) / float64(limit)))
 }
