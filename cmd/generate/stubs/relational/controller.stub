@@ -25,7 +25,6 @@ func {{TitleName}}Index() gin.HandlerFunc {
 	return func(c *gin.Context) {
         page := c.DefaultQuery("page", "1")
         limit := c.DefaultQuery("limit", "10")
-        status := c.DefaultQuery("status", "")
         after := c.DefaultQuery("after", "")
         before := c.DefaultQuery("before", "")
         status := c.DefaultQuery("status", "")
