@@ -5,6 +5,7 @@ import (
 	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/dto"
 	"{{PackageName}}/{{PackageRoot}}/{{SingularLowerName}}/models"
 	"log"
+	"strconv"
     "time"
 )
 
@@ -18,8 +19,10 @@ func All{{TitleName}}(requestFilter map[string]interface{}) ([]models.{{TitleNam
 	}
 
     paginationInstance := artifact.NewPaginator({{PluralLowerName}}, requestFilter)
+    page, _ := strconv.ParseInt(requestFilter["page"].(string), 10, 64)
+    limit, _ := strconv.ParseInt(requestFilter["limit"].(string), 10, 64)
 
-    models.{{TitleName}}Model.Where(filter).Scopes(paginationInstance.PaginateScope(requestFilter["page"].(int), requestFilter["limit"].(int))).Find(&{{PluralLowerName}})
+    models.{{TitleName}}Model.Where(filter).Scopes(paginationInstance.PaginateScope(int(page), int(limit))).Find(&{{PluralLowerName}})
 
     return {{PluralLowerName}}, paginationInstance.Meta, nil
 
