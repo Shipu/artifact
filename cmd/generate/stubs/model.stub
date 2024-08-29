@@ -12,7 +12,9 @@ type {{TitleName}} struct {
 	Id        primitive.ObjectID `json:"id,omitempty" bson:"_id"`
     Task      string             `json:"task" bson:"task"`
     Status    string             `json:"status" bson:"status"`
+	CreatedBy string             `json:"created_by,omitempty" bson:"created_by"`
     CreatedAt time.Time          `json:"created_at,omitempty" bson:"created_at"`
+	UpdatedBy string             `json:"updated_by,omitempty" bson:"updated_by"`
     UpdatedAt time.Time          `json:"updated_at,omitempty" bson:"updated_at"`
 }
 

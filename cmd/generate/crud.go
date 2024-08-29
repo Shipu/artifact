@@ -2,13 +2,14 @@ package generate
 
 import (
 	"fmt"
-	pluralize "github.com/gertd/go-pluralize"
-	"github.com/spf13/afero"
-	"github.com/spf13/cobra"
 	"log"
 	"path"
 	"runtime"
 	"strings"
+
+	pluralize "github.com/gertd/go-pluralize"
+	"github.com/spf13/afero"
+	"github.com/spf13/cobra"
 )
 
 var PackageName string
