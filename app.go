@@ -46,6 +46,10 @@ func NoSqlConnection() {
 	Mongo = NewNoSqlDB()
 }
 
+func NoSqlConnectionWithOtelMonitoring() {
+	Mongo = NewNoSqlDBWithOtelMonitoring()
+}
+
 func New() {
 	LoadConfig()
 	LoadRoute()
