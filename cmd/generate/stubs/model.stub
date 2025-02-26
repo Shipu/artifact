@@ -16,6 +16,20 @@ type {{TitleName}} struct {
     UpdatedAt time.Time          `json:"updated_at,omitempty" bson:"updated_at"`
 }
 
+func createIndexes() {
+	indexes := []mongo.IndexModel{
+		{
+			Keys:    bson.D{{"status", -1}},
+			Options: options.Index().SetName("status_index"),
+		},
+	}
+	_, err := {{TitleName}}Collection.Indexes().CreateMany(context.Background(), indexes)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func {{TitleName}}Setup() {
 	{{TitleName}}Collection = artifact.Mongo.Collection("{{PluralLowerName}}")
+	createIndexes()
 }
