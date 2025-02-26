@@ -30,26 +30,7 @@ func (mongoCollection MongoCollection) WithContext() MongoCollection {
 }
 
 func NewNoSqlDB() *MongoDB {
-	port := Config.GetString(Config.NoSqlConfig + ".Port")
-	var noSqlProtocol, host string
-
-	if port != "" {
-		noSqlProtocol = "mongodb://"
-		host = Config.GetString(Config.NoSqlConfig+".Host") + ":" + port
-	} else {
-		noSqlProtocol = "mongodb+srv://"
-		host = Config.GetString(Config.NoSqlConfig + ".Host")
-	}
-
-	password := Config.GetString(Config.NoSqlConfig + ".Password")
-	noSqlUserInfo := ""
-	if password != "" {
-		noSqlUserInfo = Config.GetString(Config.NoSqlConfig+".Username") + ":" + password + "@"
-	}
-
-	noSqlUri := noSqlProtocol + noSqlUserInfo + host + "/" + Config.GetString(Config.NoSqlConfig+".Database") + "?retryWrites=true&w=majority"
-
-	client, err := mongo.NewClient(options.Client().ApplyURI(noSqlUri))
+	client, err := mongo.NewClient(options.Client().ApplyURI(getMongoUri()))
 	if err != nil {
 		log.Fatal(err)
 	}
