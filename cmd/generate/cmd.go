@@ -1,9 +1,10 @@
 package generate
 
 import (
+	"log"
+
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 var MakeCommand = &cobra.Command{

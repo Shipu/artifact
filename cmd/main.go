@@ -1,9 +1,10 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/shipu/artifact/cmd/generate"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 var RootCmd = &cobra.Command{
