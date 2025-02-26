@@ -73,7 +73,7 @@ func NewNoSqlDB() *MongoDB {
 	return &MongoDB{Client: client, Database: database, Ctx: ctx}
 }
 
-func NewNoSqlDBWithOtelMonitor() *MongoDB {
+func NewNoSqlDBWithOtelMonitoring() *MongoDB {
 
 	opts := options.Client().
 		ApplyURI(getMongoUri()).
