@@ -135,6 +135,7 @@ type DatabaseConfig struct {
     Port       string `mapstructure:"DB_PORT" default:""`
     Database   string `mapstructure:"DB_DATABASE" default:""`
     Connection string `mapstructure:"DB_CONNECTION" default:""`
+	AuthSource string `mapstructure:"DB_AUTH_SOURCE" default:""`
 }
 ```
 and your `.env` is:
@@ -145,6 +146,7 @@ DB_PORT=
 DB_USER=user
 DB_PASS=password
 DB_DATABASE=collection
+DB_AUTH_SOURCE=admin
 ```
 
 For initialization `DatabaseConfig` config.
