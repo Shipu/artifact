@@ -153,5 +153,13 @@ func getMongoUri() string {
 		noSqlUserInfo = Config.GetString(Config.NoSqlConfig+".Username") + ":" + password + "@"
 	}
 
-	return noSqlProtocol + noSqlUserInfo + host + "/" + Config.GetString(Config.NoSqlConfig+".Database") + "?retryWrites=true&w=majority"
+	connectionUri := noSqlProtocol + noSqlUserInfo + host + "/" + Config.GetString(Config.NoSqlConfig+".Database") + "?retryWrites=true&w=majority"
+
+	//required parameter for self-hosted mongodb
+	authSource := Config.GetString(Config.NoSqlConfig + ".AuthSource")
+	if authSource != "" {
+		connectionUri = connectionUri + "&authSource=" + authSource
+	}
+
+	return connectionUri
 }
